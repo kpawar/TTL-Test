@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AddressProcessing.CSV.Interface;
+using System;
 using System.IO;
 
 namespace AddressProcessing.CSV
@@ -8,11 +9,14 @@ namespace AddressProcessing.CSV
            Assume this code is in production and backwards compatibility must be maintained.
     */
 
-    public class CSVReaderWriter
+    public class CSVReaderWriter : ICSVReaderWriter, IDisposable
     {
         private StreamReader _readerStream = null;
         private StreamWriter _writerStream = null;
 
+        /*can be moved to its own enum class but the assumption here
+         * is since this should be backwards compatible, we will leave it in this class
+        */
         [Flags]
         public enum Mode { Read = 1, Write = 2 };
 
@@ -126,16 +130,27 @@ namespace AddressProcessing.CSV
             return _readerStream.ReadLine();
         }
 
+        //Implement and call Idisposable o prevent memory leaks
         public void Close()
         {
-            if (_writerStream != null)
-            {
-                _writerStream.Close();
-            }
+            Dispose();
+        }
 
-            if (_readerStream != null)
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                _readerStream.Close();
+                if (_readerStream != null)
+                    _readerStream.Dispose();
+
+                if (_writerStream != null)
+                    _writerStream.Dispose();
             }
         }
     }

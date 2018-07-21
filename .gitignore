@@ -45,3 +45,5 @@ packages
 
 # Office Temp Files
 ~$*
+
+.vs/

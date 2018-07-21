@@ -14,7 +14,7 @@ namespace AddressProcessing.CSV
         *) No interfaces which means this class is tightly coupled to its dependent classes. If you wanted to introduce a different implementation, you 
         * would have to change it in all the dependencies. Having an interface allows you to change in just one place. 
         *) Unit tests for this class are required. Also given there is no interface, it can't be mocked and writing clean tests with full coverage is not possible. 
-        *) Again the lack of an interface makes dependency injection very difficult. Again leads to tight coupling and difficulty in writing clean and maintanable unit tests.
+        *) The error handling is insufficient. It caters for only when the mode has not been set leaving room for unhandled exceptions
         *) Potential memory leak issue if there is an exception before the close method is called. Consider a using statement in each method that uses the stream.
     */
 
