@@ -9,10 +9,12 @@ namespace AddressProcessing.CSV
            Assume this code is in production and backwards compatibility must be maintained.
     */
 
-    public class CSVReaderWriter : ICSVReaderWriter, IDisposable
+        /* Include separate classes for reading and writing
+         */
+    public class CSVReaderWriter : IDisposable, ICSVReaderWriter
     {
-        private StreamReader _readerStream = null;
-        private StreamWriter _writerStream = null;
+        private CSVReader _csvReader;
+        private CSVWriter _csvWriter;        
 
         /*can be moved to its own enum class but the assumption here
          * is since this should be backwards compatible, we will leave it in this class
@@ -24,134 +26,43 @@ namespace AddressProcessing.CSV
         {
             if (mode == Mode.Read)
             {
-                _readerStream = File.OpenText(fileName);
+                _csvReader = new CSVReader();
+                _csvReader.Open(fileName);
             }
             else if (mode == Mode.Write)
             {
-                FileInfo fileInfo = new FileInfo(fileName);
-                _writerStream = fileInfo.CreateText();
-            }
-            else
-            {
-                throw new Exception("Unknown file mode for " + fileName);
+                _csvWriter = new CSVWriter();
+                _csvWriter.Open(fileName);
             }
         }
-
         public void Write(params string[] columns)
         {
-            string outPut = "";
-
-            for (int i = 0; i < columns.Length; i++)
-            {
-                outPut += columns[i];
-                if ((columns.Length - 1) != i)
-                {
-                    outPut += "\t";
-                }
-            }
-
-            WriteLine(outPut);
+            _csvWriter.Write(columns);
         }
 
         public bool Read(string column1, string column2)
         {
-            const int FIRST_COLUMN = 0;
-            const int SECOND_COLUMN = 1;
-
-            string line;
-            string[] columns;
-
-            char[] separator = { '\t' };
-
-            line = ReadLine();
-            columns = line.Split(separator);
-
-            if (columns.Length == 0)
-            {
-                column1 = null;
-                column2 = null;
-
-                return false;
-            }
-            else
-            {
-                column1 = columns[FIRST_COLUMN];
-                column2 = columns[SECOND_COLUMN];
-
-                return true;
-            }
+            return _csvReader.Read(column1, column2);
         }
 
         public bool Read(out string column1, out string column2)
         {
-            const int FIRST_COLUMN = 0;
-            const int SECOND_COLUMN = 1;
-
-            string line;
-            string[] columns;
-
-            char[] separator = { '\t' };
-
-            line = ReadLine();
-
-            if (line == null)
-            {
-                column1 = null;
-                column2 = null;
-
-                return false;
-            }
-
-            columns = line.Split(separator);
-
-            if (columns.Length == 0)
-            {
-                column1 = null;
-                column2 = null;
-
-                return false;
-            } 
-            else
-            {
-                column1 = columns[FIRST_COLUMN];
-                column2 = columns[SECOND_COLUMN];
-
-                return true;
-            }
+            return _csvReader.Read(out column1, out column2);
         }
 
-        private void WriteLine(string line)
-        {
-            _writerStream.WriteLine(line);
-        }
-
-        private string ReadLine()
-        {
-            return _readerStream.ReadLine();
-        }
-
-        //Implement and call Idisposable o prevent memory leaks
+        //Implement and call Idisposable to prevent memory leaks
         public void Close()
         {
             Dispose();
         }
-
+    
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            if (_csvReader != null)
+                _csvReader.Dispose();
 
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_readerStream != null)
-                    _readerStream.Dispose();
-
-                if (_writerStream != null)
-                    _writerStream.Dispose();
-            }
+            if (_csvWriter != null)
+                _csvWriter.Dispose();
         }
     }
 }
