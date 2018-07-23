@@ -20,6 +20,7 @@ namespace AddressProcessing.CSV
 
         public void Open(string fileName)
         {
+            //include try catch to handle more specific exceptions associated with the System.IO library
             try
             {
                 FileInfo fileInfo = new FileInfo(fileName);
@@ -37,12 +38,13 @@ namespace AddressProcessing.CSV
 
         public void Write(params string[] columns)
         {
+            //create a separate method to allow us to test the line creation function
             string line = CreateLine(columns);
             if (!string.IsNullOrEmpty(line))
                 WriteLine(line);
         }
 
-        
+
         private void WriteLine(string line)
         {
             _streamWriter.WriteLine(line);

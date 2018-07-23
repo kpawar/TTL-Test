@@ -16,6 +16,7 @@ namespace AddressProcessing.CSV
         private readonly char[] _separator = { '\t' };
         public void Open(string fileName)
         {
+            //include try catch to handle more specific exceptions associated with the System.IO library
             try
             {
                 _streamReader = File.OpenText(fileName);
@@ -31,64 +32,51 @@ namespace AddressProcessing.CSV
         }
         public bool Read(string name, string address)
         {
-            try
+            string line;
+            //optimized the while check 
+            while (((line = _streamReader.ReadLine()) != null)
+                && !string.IsNullOrEmpty(line))
             {
-                string line;
-
-                while (((line = _streamReader.ReadLine()) != null)
-                    && !string.IsNullOrEmpty(line))
+                string[] columns = line.Split(_separator);
+                if (columns.Length == 4)
                 {
-                    string[] columns = line.Split(_separator);
-                    if (columns.Length == 4)
-                    {
-                        name = columns[0];
-                        address = columns[1];
-                        return true;
-                    }
-                    else
-                        return false;
-
+                    name = columns[0];
+                    address = columns[1];
+                    return true;
                 }
-                return false;
+                else
+                    return false;
+
             }
-            catch (Exception exception)
-            {
-                throw exception;
-            }            
+            return false;
         }
         public bool Read(out string name, out string address)
         {
-            try
+            name = address = "";
+            string line;
+            //optimized the while check 
+            while (((line = _streamReader.ReadLine()) != null)
+                && !string.IsNullOrEmpty(line))
             {
-                name = address = "";
-                string line;
-
-                while (((line = _streamReader.ReadLine()) != null)
-                    && !string.IsNullOrEmpty(line))
+                string[] columns = line.Split(_separator);
+                if (columns.Length == 4)
                 {
-                    string[] columns = line.Split(_separator);
-                    if (columns.Length == 4)
-                    {
-                        name = columns[0];
-                        address = columns[1];
-                        return true;
-                    }
-                    else
-                        return false;
-
+                    name = columns[0];
+                    address = columns[1];
+                    return true;
                 }
-                return false;
+                else
+                    return false;
+
             }
-            catch (Exception exception)
-            {
-                throw exception;
-            }            
+            return false;
+
         }
 
         public void Dispose()
         {
             if (_streamReader != null)
-                _streamReader.Dispose();            
-        }        
+                _streamReader.Dispose();
+        }
     }
 }

@@ -13,17 +13,20 @@ namespace AddressProcessing.CSV
          */
     public class CSVReaderWriter : IDisposable, ICSVReaderWriter
     {
+        //separate out the read and write responsibilities
         private ICSVReader _csvReader;
         private ICSVWriter _csvWriter;        
 
         public CSVReaderWriter()
         {
+            //for backward compatibility initialize with a concrete implementation
             _csvReader = new CSVReader();
             _csvWriter = new CSVWriter();
         }
 
         public CSVReaderWriter(ICSVReader csvReader, ICSVWriter csvWriter)
         {
+            //going forward this allows for changing implementations, mocking and dependency injection
             _csvReader = csvReader;
             _csvWriter = csvWriter;
         }
