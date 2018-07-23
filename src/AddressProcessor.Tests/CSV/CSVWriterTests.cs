@@ -7,53 +7,44 @@ using System.Text;
 using System.Threading.Tasks;
 using AddressProcessing.CSV;
 using System.IO;
-
+using NSubstitute;
 namespace AddressProcessing.Tests.CSV
 {
     [TestFixture]
     public class CSVWriterTests
-    {
-        private readonly string TestContacts = "testContacts"; 
-        private CSVWriter _csvWriter;
-        
-        [TestCase("Leke","Harrow","747","leke@leke.com")]
+    {         
+        private ICSVWriter _csvWriter;
+        //should write a tab delimited line
+        [TestCase("Leke", "Harrow", "747", "leke@leke.com")]
         public void Should_Write_Tab_Delimited_Line(params string[] values)
         {
+            //Arrange
             using (_csvWriter = new CSVWriter())
             {
-                _csvWriter.Open(TestContacts);
-                _csvWriter.Write(values);                
-            }
-            using (CSVReader reader = new CSVReader())
-            {
-                reader.Open(TestContacts);
-                string name, address;
-                bool canRead = reader.Read(out name, out address);
-                Assert.AreEqual(name, "Leke");
-                Assert.AreEqual(address, "Harrow");
-                Assert.True(canRead);
-            }
+                //Act
+                string tabbedLine = _csvWriter.CreateLine(values);
+                string[] columns = tabbedLine.Split('\t');
+                //Assert
+                Assert.That(columns.Count() == 4);
+                Assert.AreEqual(columns[0], "Leke");
+                Assert.AreEqual(columns[1], "Harrow");
+                Assert.AreEqual(columns[2], "747");
+                Assert.AreEqual(columns[3], "leke@leke.com");
+
+            }    
         }
+        //should not attempt to write an empty line in a file
         [TestCase("")]
         public void Should_Not_Write_Tab_Delimited_Line(params string[] values)
         {
+            //arrange
             using (_csvWriter = new CSVWriter())
             {
-                _csvWriter.Open(TestContacts);
-                _csvWriter.Write(values);
+                //act
+                string tabbedLine = _csvWriter.CreateLine(values);
+                //assert
+                Assert.IsEmpty(tabbedLine);                                
             }
-            using (CSVReader reader = new CSVReader())
-            {
-                reader.Open(TestContacts);
-                string name, address;
-                bool canRead = reader.Read(out name, out address);                
-                Assert.False(canRead);
-            }
-        }
-        [TearDown]
-        public void CleanUp()
-        {    
-            File.Delete(TestContacts);
-        }
+        }        
     }
 }

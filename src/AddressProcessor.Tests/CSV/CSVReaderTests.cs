@@ -16,7 +16,7 @@ namespace AddressProcessing.Tests.CSV
     {
         private readonly string ContactsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"test_data\contacts.csv");
         private readonly string NoContactsFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"test_data\no-contacts.csv");        
-        private CSVReader _csvReader;
+        private ICSVReader _csvReader;
 
         [Test]
         public void Should_Not_Throw_Exception_If_File_Exists()
@@ -26,6 +26,7 @@ namespace AddressProcessing.Tests.CSV
                 Assert.DoesNotThrow(() => _csvReader.Open(ContactsFile));
             }
         }
+
         [Test]
         public void Should_Throw_Exception_If_File_Does_Not_Exist()
         {

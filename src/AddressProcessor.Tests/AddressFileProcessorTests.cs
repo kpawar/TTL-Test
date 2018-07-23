@@ -22,11 +22,8 @@ namespace AddressProcessing.Tests
         [Test]
         public void Should_send_mail_using_mailshot_service()
         {
-            var processor = new AddressFileProcessor(_fakeMailShotService);
-            var watch = System.Diagnostics.Stopwatch.StartNew();
-            processor.Process(TestInputFile);
-            watch.Stop();            
-            System.Diagnostics.Debug.WriteLine($"ellapsed is {watch.Elapsed.Ticks}");
+            var processor = new AddressFileProcessor(_fakeMailShotService);            
+            processor.Process(TestInputFile);            
             Assert.That(_fakeMailShotService.Counter, Is.EqualTo(229));
         }
 

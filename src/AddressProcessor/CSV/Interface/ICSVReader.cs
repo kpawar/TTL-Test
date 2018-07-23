@@ -10,7 +10,7 @@ namespace AddressProcessing.CSV.Interface
      * and make it easier to write tests and swap implementations in future 
      * and make use of dependency injection
      */
-    public interface ICSVReader
+    public interface ICSVReader : IDisposable
     {
         void Open(string fileName);
         bool Read(string column1, string column2);

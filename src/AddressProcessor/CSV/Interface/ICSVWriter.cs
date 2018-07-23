@@ -10,9 +10,10 @@ namespace AddressProcessing.CSV.Interface
      * and make it easier to write tests and swap implementations in future 
      * and make use of dependency injection
      */
-    public interface ICSVWriter
+    public interface ICSVWriter : IDisposable
     {
         void Open(string fileName);        
-        void Write(params string[] columns);        
+        void Write(params string[] columns);
+        string CreateLine(params string[] columns);
     }
 }

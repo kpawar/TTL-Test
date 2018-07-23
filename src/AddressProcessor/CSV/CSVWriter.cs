@@ -10,6 +10,10 @@ namespace AddressProcessing.CSV
 {
     //implement Idispoable to prevent memory leakage
     //implement ICSVWriter interface for abstraction and TDD
+    /*System.IO.Abstractions can be used to abstract out the file creation
+    /*behaviour in order to write more tests but for now 
+    /* but we don't want to overengineer for stage 1
+     * */
     public class CSVWriter : ICSVWriter, IDisposable
     {
         private StreamWriter _streamWriter;
@@ -33,10 +37,12 @@ namespace AddressProcessing.CSV
 
         public void Write(params string[] columns)
         {
-            //string.join is more efficient and cleaner
-            WriteLine(string.Join("\t", columns));
+            string line = CreateLine(columns);
+            if (!string.IsNullOrEmpty(line))
+                WriteLine(line);
         }
 
+        
         private void WriteLine(string line)
         {
             _streamWriter.WriteLine(line);
@@ -48,5 +54,15 @@ namespace AddressProcessing.CSV
                 _streamWriter.Dispose();
         }
 
+        /// <summary>
+        /// Creates a line entry
+        /// </summary>
+        /// <param name="columns"></param>
+        /// <returns></returns>
+        public string CreateLine(params string[] columns)
+        {
+            //this allows us to test this functionality
+            return string.Join("\t", columns);
+        }
     }
 }

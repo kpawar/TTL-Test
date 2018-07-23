@@ -7,7 +7,7 @@ using static AddressProcessing.CSV.CSVReaderWriter;
 
 namespace AddressProcessing.CSV.Interface
 {
-   interface ICSVReaderWriter
+   public interface ICSVReaderWriter
     {
         void Open(string fileName, Mode mode);
         void Write(params string[] columns);

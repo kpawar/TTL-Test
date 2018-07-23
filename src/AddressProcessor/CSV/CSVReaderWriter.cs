@@ -13,9 +13,20 @@ namespace AddressProcessing.CSV
          */
     public class CSVReaderWriter : IDisposable, ICSVReaderWriter
     {
-        private CSVReader _csvReader;
-        private CSVWriter _csvWriter;        
+        private ICSVReader _csvReader;
+        private ICSVWriter _csvWriter;        
 
+        public CSVReaderWriter()
+        {
+            _csvReader = new CSVReader();
+            _csvWriter = new CSVWriter();
+        }
+
+        public CSVReaderWriter(ICSVReader csvReader, ICSVWriter csvWriter)
+        {
+            _csvReader = csvReader;
+            _csvWriter = csvWriter;
+        }
         /*can be moved to its own enum class but the assumption here
          * is since this should be backwards compatible, we will leave it in this class
         */
@@ -25,13 +36,11 @@ namespace AddressProcessing.CSV
         public void Open(string fileName, Mode mode)
         {
             if (mode == Mode.Read)
-            {
-                _csvReader = new CSVReader();
+            {                
                 _csvReader.Open(fileName);
             }
             else if (mode == Mode.Write)
-            {
-                _csvWriter = new CSVWriter();
+            {                
                 _csvWriter.Open(fileName);
             }
         }
