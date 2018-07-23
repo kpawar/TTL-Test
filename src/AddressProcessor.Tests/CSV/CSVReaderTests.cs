@@ -59,7 +59,7 @@ namespace AddressProcessing.Tests.CSV
         }
 
         [Test]
-        public void Should_Read_When_Contact_Exists_In_File()
+        public void Should_Read_Line_When_Contact_Exists_In_File()
         {
             //Arrange
             using (_csvReader = new CSVReader())
