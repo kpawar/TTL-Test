@@ -17,7 +17,7 @@ namespace AddressProcessing.CSV
         *4) The error handling in the Open method is insufficient. It caters for only when the mode has not been set leaving room for unhandled exceptions
         *5) Potential memory leak issue if there is an exception before the close method is called. Consider a using statement in each method that uses the stream.
         *6) The write method can be more efficient by using the string.join extension
-        *7) The write method will attempt to right an empty line
+        *7) The write method will attempt to write an empty line. Consder doing a nullorempty check.
     */
 
     public class CSVReaderWriterForAnnotation
