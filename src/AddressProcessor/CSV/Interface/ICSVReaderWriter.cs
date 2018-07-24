@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static AddressProcessing.CSV.CSVReaderWriter;
+﻿using static AddressProcessing.CSV.CSVReaderWriter;
 
 namespace AddressProcessing.CSV.Interface
 {
-   public interface ICSVReaderWriter
+    public interface ICSVReaderWriter
     {
         void Open(string fileName, Mode mode);
         void Write(params string[] columns);

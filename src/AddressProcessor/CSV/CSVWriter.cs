@@ -1,10 +1,6 @@
 ﻿using AddressProcessing.CSV.Interface;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AddressProcessing.CSV
 {
@@ -18,6 +14,7 @@ namespace AddressProcessing.CSV
     {
         private StreamWriter _streamWriter;
 
+        //Keep the open method for backward compatibility
         public void Open(string fileName)
         {
             //include try catch to handle more specific exceptions associated with the System.IO library
@@ -36,6 +33,7 @@ namespace AddressProcessing.CSV
             }
         }
 
+        //keep the write method for backward compatibility
         public void Write(params string[] columns)
         {
             //create a separate method to allow us to test the line creation function
@@ -44,7 +42,7 @@ namespace AddressProcessing.CSV
                 WriteLine(line);
         }
 
-
+        //keep writeline method for backward compatibility
         private void WriteLine(string line)
         {
             _streamWriter.WriteLine(line);
@@ -63,7 +61,7 @@ namespace AddressProcessing.CSV
         /// <returns></returns>
         public string CreateLine(params string[] columns)
         {
-            //this allows us to test this functionality
+            //this allows us to unit test this functionality
             return string.Join("\t", columns);
         }
     }

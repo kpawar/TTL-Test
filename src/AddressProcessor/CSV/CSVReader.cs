@@ -1,10 +1,6 @@
 ﻿using AddressProcessing.CSV.Interface;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AddressProcessing.CSV
 {
@@ -14,6 +10,8 @@ namespace AddressProcessing.CSV
     {
         private StreamReader _streamReader = null;
         private readonly char[] _separator = { '\t' };
+
+        //keep open method for backward compatibility
         public void Open(string fileName)
         {
             //include try catch to handle more specific exceptions associated with the System.IO library
@@ -30,6 +28,8 @@ namespace AddressProcessing.CSV
                 throw exception;
             }
         }
+
+        //keep read method for backward compatibility
         public bool Read(string name, string address)
         {
             string line;

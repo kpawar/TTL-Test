@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AddressProcessing.CSV.Interface;
+﻿using AddressProcessing.CSV.Interface;
 using NUnit.Framework;
 using NSubstitute;
 using AddressProcessing.CSV;
@@ -33,7 +29,7 @@ namespace Csv.Tests
             _csvReader.Received().Open(FilePath);
             _csvWriter.DidNotReceive().Open(FilePath);            
         }
-        [TestCase]
+        [Test]
         public void Should_Open_Writer_When_Mode_Is_Write()
         {
             //Arrange
@@ -48,7 +44,7 @@ namespace Csv.Tests
             _csvWriter.Received().Open(FilePath); 
             _csvReader.DidNotReceive().Open(FilePath);
         }
-        [TestCase]
+        [Test]
         public void Should_Dispose_Resources_When_Closed()
         {
             //Arrange
@@ -65,7 +61,7 @@ namespace Csv.Tests
             _csvWriter.Received().Dispose();
         }
         
-        [TestCase]
+        [Test]
         public void Should_Return_Columns_When_Line_Is_Read_Successfully()
         {
             //Arrange
@@ -84,7 +80,7 @@ namespace Csv.Tests
             Assert.AreEqual(name, Name);
             Assert.AreEqual(address, Address);
         }
-        [TestCase]
+        [Test]
         public void Should_Read_Line_Successfully_When_File_Is_Read()
         {
             //Arrange
@@ -100,7 +96,7 @@ namespace Csv.Tests
             _csvReader.Received().Read(Name,Address);
         }
 
-        [TestCase]
+        [Test]
         public void Should_Write_Line_When_Columns_Are_Written()
         {
             //Arrange

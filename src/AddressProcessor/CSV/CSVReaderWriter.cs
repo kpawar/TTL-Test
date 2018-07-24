@@ -1,6 +1,5 @@
 ﻿using AddressProcessing.CSV.Interface;
 using System;
-using System.IO;
 
 namespace AddressProcessing.CSV
 {
@@ -9,13 +8,15 @@ namespace AddressProcessing.CSV
            Assume this code is in production and backwards compatibility must be maintained.
     */
 
-        /* Include separate classes for reading and writing
-         */
+    /* Include separate classes for reading and writing
+     * In future revisions, the csvreader and csvwriter
+     * will be moved into separate class files
+     */
     public class CSVReaderWriter : IDisposable, ICSVReaderWriter
     {
         //separate out the read and write responsibilities
         private ICSVReader _csvReader;
-        private ICSVWriter _csvWriter;        
+        private ICSVWriter _csvWriter;
 
         public CSVReaderWriter()
         {
@@ -35,39 +36,43 @@ namespace AddressProcessing.CSV
         */
         [Flags]
         public enum Mode { Read = 1, Write = 2 };
-
+        //Keep the open method for backward compatibility
         public void Open(string fileName, Mode mode)
         {
             if (mode == Mode.Read)
-            {                
+            {
                 _csvReader.Open(fileName);
             }
             else if (mode == Mode.Write)
-            {                
+            {
                 _csvWriter.Open(fileName);
             }
         }
+        //Keep the write method for backward compatibility
         public void Write(params string[] columns)
         {
             _csvWriter.Write(columns);
         }
 
+        //Keep the read method for backward compatibility
         public bool Read(string column1, string column2)
         {
             return _csvReader.Read(column1, column2);
         }
-
+        //Keep the read method for backward compatibility
         public bool Read(out string column1, out string column2)
         {
             return _csvReader.Read(out column1, out column2);
         }
 
-        //Implement and call Idisposable to prevent memory leaks
+        /*Keep the close method for backward compatibility
+         * it will call the Idisposable dispose method
+         * */
         public void Close()
         {
             Dispose();
         }
-    
+        //implement idisposable
         public void Dispose()
         {
             if (_csvReader != null)
